@@ -301,6 +301,113 @@
             opacity: 0.7;
         }
 
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(62, 39, 35, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: #fff;
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 440px;
+            width: 100%;
+            box-shadow: 0 16px 48px rgba(62, 39, 35, 0.25);
+            position: relative;
+        }
+
+        .modal__close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: #6D4C41;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .modal__close:hover {
+            color: #E65100;
+        }
+
+        .modal__title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #3E2723;
+            margin-bottom: 4px;
+        }
+
+        .modal__subtitle {
+            font-size: 0.95rem;
+            color: #6D4C41;
+            margin-bottom: 20px;
+        }
+
+        .modal__field {
+            display: block;
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #D7CCC8;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            color: #3E2723;
+            resize: vertical;
+            min-height: 100px;
+            transition: border-color 0.2s;
+        }
+
+        .modal__field:focus {
+            outline: none;
+            border-color: #FF6F00;
+        }
+
+        .modal__submit {
+            display: block;
+            width: 100%;
+            margin-top: 16px;
+            padding: 12px;
+            background: #FF6F00;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .modal__submit:hover {
+            background: #E65100;
+        }
+
+        .pet-card__btn + .pet-card__btn {
+            margin-top: 8px;
+        }
+
+        .pet-card__btn--contact {
+            background: #5D4037;
+        }
+
+        .pet-card__btn--contact:hover {
+            background: #4E342E;
+        }
+
         /* ===== RESPONSIVE ===== */
         @media (max-width: 600px) {
             .carousel__btn {
@@ -407,6 +514,7 @@
                     <div class="pet-card__name">Бобик</div>
                     <div class="pet-card__desc">Ласковый и игривый. Обожает детей и прогулки в парке.</div>
                     <a href="bobik.html" class="pet-card__btn">Узнать больше</a>
+                    <button class="pet-card__btn pet-card__btn--contact" onclick="openModal('Бобик')">Написать нам</button>
                 </div>
             </div>
             <div class="pet-card">
@@ -415,6 +523,7 @@
                     <div class="pet-card__name">Рекс</div>
                     <div class="pet-card__desc">Верный друг и охранник. Знает базовые команды.</div>
                     <a href="reks.html" class="pet-card__btn">Узнать больше</a>
+                    <button class="pet-card__btn pet-card__btn--contact" onclick="openModal('Рекс')">Написать нам</button>
                 </div>
             </div>
             <div class="pet-card">
@@ -423,6 +532,7 @@
                     <div class="pet-card__name">Мушка</div>
                     <div class="pet-card__desc">Тихая и спокойная. Идеальна для пожилых людей.</div>
                     <a href="mushka.html" class="pet-card__btn">Узнать больше</a>
+                    <button class="pet-card__btn pet-card__btn--contact" onclick="openModal('Мушка')">Написать нам</button>
                 </div>
             </div>
             <div class="pet-card">
@@ -431,6 +541,7 @@
                     <div class="pet-card__name">Тузик</div>
                     <div class="pet-card__desc">Энергичный и любопытный. Обожает бегать и играть с мячом.</div>
                     <a href="tuzik.html" class="pet-card__btn">Узнать больше</a>
+                    <button class="pet-card__btn pet-card__btn--contact" onclick="openModal('Тузик')">Написать нам</button>
                 </div>
             </div>
             <div class="pet-card">
@@ -439,6 +550,7 @@
                     <div class="pet-card__name">Шарик</div>
                     <div class="pet-card__desc">Весёлый и добрый. Любит возиться на диване.</div>
                     <a href="sharik.html" class="pet-card__btn">Узнать больше</a>
+                    <button class="pet-card__btn pet-card__btn--contact" onclick="openModal('Шарик')">Написать нам</button>
                 </div>
             </div>
             <div class="pet-card">
@@ -447,6 +559,7 @@
                     <div class="pet-card__name">Дружок</div>
                     <div class="pet-card__desc">Умный и послушный. Быстро учится новому.</div>
                     <a href="druzhok.html" class="pet-card__btn">Узнать больше</a>
+                    <button class="pet-card__btn pet-card__btn--contact" onclick="openModal('Дружок')">Написать нам</button>
                 </div>
             </div>
         </div>
@@ -457,6 +570,17 @@
         <div class="footer__name">Сохраняя жизнь</div>
         <div class="footer__copy">&copy; 2025 Приют для собак. Все права защищены.</div>
     </footer>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <button class="modal__close" id="modalClose">&times;</button>
+            <div class="modal__title">Написать нам</div>
+            <div class="modal__subtitle">Питомец: <strong id="modalPetName"></strong></div>
+            <textarea class="modal__field" id="modalMessage" placeholder="Ваше сообщение..."></textarea>
+            <button class="modal__submit" id="modalSubmit">Отправить</button>
+        </div>
+    </div>
 
     <script>
         // ===== CAROUSEL =====
@@ -522,6 +646,41 @@
                 diff > 0 ? next() : prev();
             }
         }, { passive: true });
+
+        // ===== MODAL =====
+        const overlay = document.getElementById('modalOverlay');
+        const petNameEl = document.getElementById('modalPetName');
+        const messageField = document.getElementById('modalMessage');
+
+        function openModal(petName) {
+            petNameEl.textContent = petName;
+            messageField.value = '';
+            overlay.classList.add('active');
+        }
+
+        document.getElementById('modalClose').addEventListener('click', () => {
+            overlay.classList.remove('active');
+        });
+
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) overlay.classList.remove('active');
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') overlay.classList.remove('active');
+        });
+
+        document.getElementById('modalSubmit').addEventListener('click', () => {
+            const petName = petNameEl.textContent;
+            const message = messageField.value.trim();
+            if (!message) {
+                messageField.focus();
+                return;
+            }
+            const subject = encodeURIComponent('Написать нам: ' + petName);
+            const body = encodeURIComponent('Питомец: ' + petName + '\n\n' + message);
+            window.location.href = 'mailto:turpetko84@gmail.ru?subject=' + subject + '&body=' + body;
+        });
     </script>
 </body>
 </html>
