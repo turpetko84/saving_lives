@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сохраняя жизнь — Приют для собак</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: #3E2723;
+            line-height: 1.6;
+        }
+
+        /* ===== HERO / CAROUSEL ===== */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 500px;
+            overflow: hidden;
+        }
+
+        .carousel {
+            position: absolute;
+            inset: 0;
+        }
+
+        .carousel__track {
+            display: flex;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .carousel__slide {
+            min-width: 100%;
+            height: 100%;
+        }
+
+        .carousel__slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero__overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(62, 39, 35, 0.5) 0%,
+                rgba(62, 39, 35, 0.3) 50%,
+                rgba(62, 39, 35, 0.7) 100%
+            );
+            z-index: 1;
+        }
+
+        .hero__content {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            color: #fff;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero__title {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 800;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+            margin-bottom: 16px;
+        }
+
+        .hero__subtitle {
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            font-weight: 400;
+            opacity: 0.9;
+            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Carousel controls */
+        .carousel__btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 3;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .carousel__btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel__btn--prev { left: 20px; }
+        .carousel__btn--next { right: 20px; }
+
+        .carousel__dots {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            display: flex;
+            gap: 10px;
+        }
+
+        .carousel__dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            background: transparent;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .carousel__dot.active {
+            background: #FF6F00;
+            border-color: #FF6F00;
+            transform: scale(1.2);
+        }
+
+        /* ===== ABOUT ===== */
+        .about {
+            padding: 80px 20px;
+            background: #FFF8E1;
+            text-align: center;
+        }
+
+        .about__title {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #3E2723;
+        }
+
+        .about__text {
+            max-width: 700px;
+            margin: 0 auto 48px;
+            font-size: 1.1rem;
+            color: #5D4037;
+        }
+
+        .about__cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .about__card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 32px 24px;
+            box-shadow: 0 4px 20px rgba(62, 39, 35, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .about__card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(62, 39, 35, 0.12);
+        }
+
+        .about__card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        .about__card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .about__card-desc {
+            font-size: 0.95rem;
+            color: #6D4C41;
+        }
+
+        /* ===== PETS ===== */
+        .pets {
+            padding: 80px 20px;
+            background: #fff;
+            text-align: center;
+        }
+
+        .pets__title {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #3E2723;
+        }
+
+        .pets__subtitle {
+            font-size: 1.1rem;
+            color: #6D4C41;
+            margin-bottom: 48px;
+        }
+
+        .pets__grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .pet-card {
+            background: #FFF8E1;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(62, 39, 35, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .pet-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 28px rgba(62, 39, 35, 0.14);
+        }
+
+        .pet-card__img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .pet-card__body {
+            padding: 20px;
+        }
+
+        .pet-card__name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #3E2723;
+        }
+
+        .pet-card__desc {
+            font-size: 0.95rem;
+            color: #6D4C41;
+            margin-bottom: 16px;
+        }
+
+        .pet-card__btn {
+            display: inline-block;
+            padding: 10px 24px;
+            background: #FF6F00;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .pet-card__btn:hover {
+            background: #E65100;
+            transform: scale(1.03);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: #3E2723;
+            color: #FFF8E1;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .footer__name {
+            font-size: clamp(1.3rem, 3vw, 1.8rem);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .footer__copy {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .carousel__btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .carousel__btn--prev { left: 10px; }
+            .carousel__btn--next { right: 10px; }
+
+            .about, .pets {
+                padding: 60px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HERO / CAROUSEL -->
+    <section class="hero">
+        <div class="carousel" id="carousel">
+            <div class="carousel__track" id="carouselTrack">
+                <div class="carousel__slide">
+                    <img src="images/carousel_1.jpg" alt="Собака 1">
+                </div>
+                <div class="carousel__slide">
+                    <img src="images/carousel_2.jpg" alt="Собака 2">
+                </div>
+                <div class="carousel__slide">
+                    <img src="images/carousel_3.jpg" alt="Собака 3">
+                </div>
+                <div class="carousel__slide">
+                    <img src="images/carousel_4.jpg" alt="Собака 4">
+                </div>
+                <div class="carousel__slide">
+                    <img src="images/carousel_5.jpg" alt="Собака 5">
+                </div>
+                <div class="carousel__slide">
+                    <img src="images/carousel_6.jpg" alt="Собака 6">
+                </div>
+                <div class="carousel__slide">
+                    <img src="images/carousel_7.jpg" alt="Собака 7">
+                </div>
+                <div class="carousel__slide">
+                    <img src="images/carousel_8.jpg" alt="Собака 8">
+                </div>
+                <div class="carousel__slide">
+                    <img src="images/carousel_9.jpg" alt="Собака 9">
+                </div>
+                <div class="carousel__slide">
+                    <img src="images/carousel_10.jpg" alt="Собака 10">
+                </div>
+            </div>
+        </div>
+
+        <div class="hero__overlay"></div>
+
+        <div class="hero__content">
+            <h1 class="hero__title">Сохраняя жизнь</h1>
+            <p class="hero__subtitle">Каждый пёс заслуживает любящего дома</p>
+        </div>
+
+        <button class="carousel__btn carousel__btn--prev" id="prevBtn" aria-label="Предыдущий">&#10094;</button>
+        <button class="carousel__btn carousel__btn--next" id="nextBtn" aria-label="Следующий">&#10095;</button>
+
+        <div class="carousel__dots" id="carouselDots"></div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about">
+        <h2 class="about__title">О нашем приюте</h2>
+        <p class="about__text">
+            Мы — команда волонтёров, которые каждый день спасают собак с улицы и ищут им любящих хозяев.
+            Наша миссия — дать каждому псу второй шанс на счастливую жизнь.
+        </p>
+        <div class="about__cards">
+            <div class="about__card">
+                <div class="about__card-icon">&#128054;</div>
+                <div class="about__card-title">Приют</div>
+                <div class="about__card-desc">Более 50 собак находятся под нашей опекой и ждут своего дома</div>
+            </div>
+            <div class="about__card">
+                <div class="about__card-icon">&#10084;&#65039;</div>
+                <div class="about__card-title">Помощь</div>
+                <div class="about__card-desc">Ветеринарная помощь, кормление и содержание — всё на пожертвования</div>
+            </div>
+            <div class="about__card">
+                <div class="about__card-icon">&#127968;</div>
+                <div class="about__card-title">Усыновление</div>
+                <div class="about__card-desc">Помогаем найти идеального питомца для вашей семьи</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PETS -->
+    <section class="pets">
+        <h2 class="pets__title">Наши питомцы</h2>
+        <p class="pets__subtitle">Эти ребята ждут свой новый дом</p>
+        <div class="pets__grid">
+            <div class="pet-card">
+                <img class="pet-card__img" src="images/pet_11.jpg" alt="Бобик">
+                <div class="pet-card__body">
+                    <div class="pet-card__name">Бобик</div>
+                    <div class="pet-card__desc">Ласковый и игривый. Обожает детей и прогулки в парке.</div>
+                    <a href="bobik.html" class="pet-card__btn">Узнать больше</a>
+                </div>
+            </div>
+            <div class="pet-card">
+                <img class="pet-card__img" src="images/pet_12.jpg" alt="Рекс">
+                <div class="pet-card__body">
+                    <div class="pet-card__name">Рекс</div>
+                    <div class="pet-card__desc">Верный друг и охранник. Знает базовые команды.</div>
+                    <a href="reks.html" class="pet-card__btn">Узнать больше</a>
+                </div>
+            </div>
+            <div class="pet-card">
+                <img class="pet-card__img" src="images/pet_13.jpg" alt="Мушка">
+                <div class="pet-card__body">
+                    <div class="pet-card__name">Мушка</div>
+                    <div class="pet-card__desc">Тихая и спокойная. Идеальна для пожилых людей.</div>
+                    <a href="mushka.html" class="pet-card__btn">Узнать больше</a>
+                </div>
+            </div>
+            <div class="pet-card">
+                <img class="pet-card__img" src="images/pet_14.jpg" alt="Тузик">
+                <div class="pet-card__body">
+                    <div class="pet-card__name">Тузик</div>
+                    <div class="pet-card__desc">Энергичный и любопытный. Обожает бегать и играть с мячом.</div>
+                    <a href="tuzik.html" class="pet-card__btn">Узнать больше</a>
+                </div>
+            </div>
+            <div class="pet-card">
+                <img class="pet-card__img" src="images/pet_15.jpg" alt="Шарик">
+                <div class="pet-card__body">
+                    <div class="pet-card__name">Шарик</div>
+                    <div class="pet-card__desc">Весёлый и добрый. Любит возиться на диване.</div>
+                    <a href="sharik.html" class="pet-card__btn">Узнать больше</a>
+                </div>
+            </div>
+            <div class="pet-card">
+                <img class="pet-card__img" src="images/pet_16.jpg" alt="Дружок">
+                <div class="pet-card__body">
+                    <div class="pet-card__name">Дружок</div>
+                    <div class="pet-card__desc">Умный и послушный. Быстро учится новому.</div>
+                    <a href="druzhok.html" class="pet-card__btn">Узнать больше</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer__name">Сохраняя жизнь</div>
+        <div class="footer__copy">&copy; 2025 Приют для собак. Все права защищены.</div>
+    </footer>
+
+    <script>
+        // ===== CAROUSEL =====
+        const track = document.getElementById('carouselTrack');
+        const dotsContainer = document.getElementById('carouselDots');
+        const slides = track.children;
+        const total = slides.length;
+        let current = 0;
+        let autoplayTimer;
+
+        // Create dots
+        for (let i = 0; i < total; i++) {
+            const dot = document.createElement('button');
+            dot.className = 'carousel__dot' + (i === 0 ? ' active' : '');
+            dot.setAttribute('aria-label', 'Слайд ' + (i + 1));
+            dot.addEventListener('click', () => goTo(i));
+            dotsContainer.appendChild(dot);
+        }
+
+        const dots = dotsContainer.children;
+
+        function goTo(index) {
+            current = (index + total) % total;
+            track.style.transform = 'translateX(-' + (current * 100) + '%)';
+            for (let i = 0; i < total; i++) {
+                dots[i].classList.toggle('active', i === current);
+            }
+            resetAutoplay();
+        }
+
+        function next() { goTo(current + 1); }
+        function prev() { goTo(current - 1); }
+
+        document.getElementById('nextBtn').addEventListener('click', next);
+        document.getElementById('prevBtn').addEventListener('click', prev);
+
+        // Autoplay
+        function resetAutoplay() {
+            clearInterval(autoplayTimer);
+            autoplayTimer = setInterval(next, 5000);
+        }
+        resetAutoplay();
+
+        // Pause on hover
+        const hero = document.querySelector('.hero');
+        hero.addEventListener('mouseenter', () => clearInterval(autoplayTimer));
+        hero.addEventListener('mouseleave', resetAutoplay);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') prev();
+            if (e.key === 'ArrowRight') next();
+        });
+
+        // Touch / swipe support
+        let touchStartX = 0;
+        hero.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        hero.addEventListener('touchend', (e) => {
+            const diff = touchStartX - e.changedTouches[0].screenX;
+            if (Math.abs(diff) > 50) {
+                diff > 0 ? next() : prev();
+            }
+        }, { passive: true });
+    </script>
+</body>
+</html>
