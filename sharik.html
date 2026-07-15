@@ -4,33 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Шарик — Сохраняя жизнь</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #3E2723; line-height: 1.6; background: #FFF8E1; }
-        .hero { position: relative; height: 60vh; min-height: 400px; overflow: hidden; }
-        .hero img { width: 100%; height: 100%; object-fit: cover; }
-        .hero__overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(62,39,35,0.3) 0%, rgba(62,39,35,0.7) 100%); }
-        .hero__content { position: absolute; bottom: 40px; left: 40px; z-index: 2; color: #fff; }
-        .hero__name { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; text-shadow: 0 2px 20px rgba(0,0,0,0.5); }
-        .hero__breed { font-size: 1.2rem; opacity: 0.9; margin-top: 4px; }
-        .content { max-width: 800px; margin: 0 auto; padding: 48px 20px; }
-        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin-bottom: 40px; }
-        .stat { background: #fff; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 2px 12px rgba(62,39,35,0.06); }
-        .stat__label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; color: #6D4C41; margin-bottom: 4px; }
-        .stat__value { font-size: 1.3rem; font-weight: 700; color: #3E2723; }
-        .description { background: #fff; border-radius: 16px; padding: 32px; box-shadow: 0 2px 16px rgba(62,39,35,0.06); margin-bottom: 40px; }
-        .description h2 { font-size: 1.5rem; margin-bottom: 16px; color: #3E2723; }
-        .description p { color: #5D4037; font-size: 1.05rem; }
-        .actions { display: flex; gap: 16px; flex-wrap: wrap; }
-        .btn { display: inline-block; padding: 14px 32px; border-radius: 8px; font-size: 1rem; font-weight: 600; text-decoration: none; cursor: pointer; border: none; transition: transform 0.2s, background 0.3s; }
-        .btn--primary { background: #FF6F00; color: #fff; }
-        .btn--primary:hover { background: #E65100; transform: scale(1.03); }
-        .btn--secondary { background: #fff; color: #3E2723; border: 2px solid #3E2723; }
-        .btn--secondary:hover { background: #3E2723; color: #fff; }
-        @media (max-width: 600px) { .hero__content { left: 20px; bottom: 24px; } .content { padding: 32px 16px; } }
-    </style>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/pet-page.css">
 </head>
-<body>
+<body style="background: #FFF8E1">
     <section class="hero">
         <img src="images/pet_15.jpg" alt="Шарик">
         <div class="hero__overlay"></div>
@@ -53,8 +30,20 @@
         </div>
         <div class="actions">
             <a href="index.html#pets" class="btn btn--secondary">Назад к питомцам</a>
-            <a href="mailto:save-life@example.com?subject=Хочу забрать Шарика" class="btn btn--primary">Написать нам</a>
+            <button class="btn btn--primary" onclick="openModal('Шарик')">Написать нам</button>
         </div>
     </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <button class="modal__close" id="modalClose">&times;</button>
+            <div class="modal__title">Написать нам</div>
+            <div class="modal__subtitle">Питомец: <strong id="modalPetName">Шарик</strong></div>
+            <textarea class="modal__field" id="modalMessage" placeholder="Ваше сообщение..."></textarea>
+            <button class="modal__submit" id="modalSubmit">Отправить</button>
+        </div>
+    </div>
+
+    <script src="js/modal.js"></script>
 </body>
 </html>
