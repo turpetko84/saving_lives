@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}Панель управления{% endblock %}
+{% block content %}
+
+<div class="stats-row">
+    <div class="stat-box">
+        <div class="stat-box__number">{{ pet_count }}</div>
+        <div class="stat-box__label">Питомцев</div>
+    </div>
+    <div class="stat-box">
+        <div class="stat-box__number">{{ app_count }}</div>
+        <div class="stat-box__label">Заявок</div>
+    </div>
+</div>
+
+<!-- Applications -->
+<div class="card">
+    <h2>Заявки на усыновление</h2>
+    {% if applications %}
+    <table>
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Питомец</th>
+                <th>Имя</th>
+                <th>Email</th>
+                <th>Телефон</th>
+                <th>Сообщение</th>
+                <th>Статус</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for app in applications %}
+            <tr>
+                <td>{{ app.created_at }}</td>
+                <td>{{ app.pet_name or '—' }}</td>
+                <td>{{ app.name }}</td>
+                <td>{{ app.email or '—' }}</td>
+                <td>{{ app.phone or '—' }}</td>
+                <td>{{ app.message[:80] }}{% if app.message|length > 80 %}...{% endif %}</td>
+                <td><span class="status status--{{ app.status }}">{{ app.status }}</span></td>
+                <td>
+                    <form method="POST" action="/admin/applications/{{ app.id }}/status" style="display:inline">
+                        <select name="status" onchange="this.form.submit()" style="padding:4px;border-radius:4px;border:1px solid #ddd;font-size:0.8rem">
+                            <option value="new" {% if app.status == 'new' %}selected{% endif %}>Новая</option>
+                            <option value="reviewed" {% if app.status == 'reviewed' %}selected{% endif %}>Рассмотрена</option>
+                            <option value="approved" {% if app.status == 'approved' %}selected{% endif %}>Одобрена</option>
+                            <option value="rejected" {% if app.status == 'rejected' %}selected{% endif %}>Отклонена</option>
+                        </select>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color:#888;text-align:center;padding:20px">Заявок пока нет</p>
+    {% endif %}
+</div>
+
+<!-- Pets -->
+<div class="card">
+    <h2>Питомцы</h2>
+    {% if pets %}
+    <table>
+        <thead>
+            <tr><th></th><th>Имя</th><th>Порода</th><th>Возраст</th><th></th></tr>
+        </thead>
+        <tbody>
+            {% for pet in pets %}
+            <tr>
+                <td><img class="pet-thumb" src="/{{ pet.image_path }}" alt="{{ pet.name }}"></td>
+                <td>{{ pet.name }}</td>
+                <td>{{ pet.breed }}</td>
+                <td>{{ pet.age }}</td>
+                <td>
+                    <a href="/admin/pets/{{ pet.id }}/edit" class="btn btn--primary btn--small">Редактировать</a>
+                    <form method="POST" action="/admin/pets/{{ pet.id }}/delete" style="display:inline" onsubmit="return confirm('Удалить {{ pet.name }}?')">
+                        <button class="btn btn--danger btn--small" type="submit">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color:#888;text-align:center;padding:20px">Питомцев нет</p>
+    {% endif %}
+</div>
+
+<!-- Add pet form -->
+<div class="card">
+    <h2>Добавить питомца</h2>
+    <form method="POST" action="/admin/pets" enctype="multipart/form-data">
+        <div class="form-row">
+            <div><label>Имя *</label><input type="text" name="name" required></div>
+            <div><label>Порода</label><input type="text" name="breed"></div>
+            <div><label>Возраст</label><input type="text" name="age"></div>
+        </div>
+        <div class="form-row">
+            <div><label>Пол</label><input type="text" name="gender"></div>
+            <div><label>Рост</label><input type="text" name="height"></div>
+            <div><label>Вес</label><input type="text" name="weight"></div>
+        </div>
+        <div class="form-row">
+            <div><label>Окрас</label><input type="text" name="color"></div>
+            <div><label>Фото</label><input type="file" name="photo" accept="image/*"></div>
+        </div>
+        <div class="form-row">
+            <div style="flex:1"><label>Описание</label><textarea name="description"></textarea></div>
+        </div>
+        <button class="btn btn--primary" type="submit">Добавить</button>
+    </form>
+</div>
+
+{% endblock %}

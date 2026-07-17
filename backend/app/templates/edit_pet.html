@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Редактировать {{ pet.name }}{% endblock %}
+{% block content %}
+
+<div class="card">
+    <h2>Редактировать питомца: {{ pet.name }}</h2>
+    <form method="POST" action="/admin/pets/{{ pet.id }}/edit" enctype="multipart/form-data">
+        <div class="form-row">
+            <div><label>Имя *</label><input type="text" name="name" value="{{ pet.name }}" required></div>
+            <div><label>Порода</label><input type="text" name="breed" value="{{ pet.breed or '' }}"></div>
+            <div><label>Возраст</label><input type="text" name="age" value="{{ pet.age or '' }}"></div>
+        </div>
+        <div class="form-row">
+            <div><label>Пол</label><input type="text" name="gender" value="{{ pet.gender or '' }}"></div>
+            <div><label>Рост</label><input type="text" name="height" value="{{ pet.height or '' }}"></div>
+            <div><label>Вес</label><input type="text" name="weight" value="{{ pet.weight or '' }}"></div>
+        </div>
+        <div class="form-row">
+            <div><label>Окрас</label><input type="text" name="color" value="{{ pet.color or '' }}"></div>
+            <div>
+                <label>Фото</label>
+                {% if pet.image_path %}
+                <div style="margin-bottom:8px"><img class="pet-thumb" src="/{{ pet.image_path }}" alt="{{ pet.name }}"></div>
+                {% endif %}
+                <input type="file" name="photo" accept="image/*">
+            </div>
+        </div>
+        <div class="form-row">
+            <div style="flex:1"><label>Описание</label><textarea name="description">{{ pet.description or '' }}</textarea></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center">
+            <button class="btn btn--primary" type="submit">Сохранить</button>
+            <a href="/admin/dashboard" style="color:#666;text-decoration:none">Назад к дашборду</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ pet.name }} — Сохраняя жизни</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/pet-page.css">
+</head>
+<body style="background: #FFF8E1">
+    <section class="hero">
+        <img src="/{{ pet.image_path }}" alt="{{ pet.name }}">
+        <div class="hero__overlay"></div>
+        <div class="hero__content">
+            <h1 class="hero__name">{{ pet.name }}</h1>
+            <div class="hero__breed">{{ pet.breed }}</div>
+        </div>
+    </section>
+    <div class="content">
+        <div class="stats">
+            <div class="stat"><div class="stat__label">Возраст</div><div class="stat__value">{{ pet.age }}</div></div>
+            <div class="stat"><div class="stat__label">Пол</div><div class="stat__value">{{ pet.gender }}</div></div>
+            <div class="stat"><div class="stat__label">Рост</div><div class="stat__value">{{ pet.height }}</div></div>
+            <div class="stat"><div class="stat__label">Вес</div><div class="stat__value">{{ pet.weight }}</div></div>
+            <div class="stat"><div class="stat__label">Окрас</div><div class="stat__value">{{ pet.color }}</div></div>
+        </div>
+        <div class="description">
+            <h2>О {{ pet.name }}</h2>
+            <p>{{ pet.description }}</p>
+        </div>
+        <div class="actions">
+            <a href="/" class="btn btn--secondary">Назад к питомцам</a>
+            <button class="btn btn--primary" onclick="openModal('{{ pet.name }}', {{ pet.id }})">Написать нам</button>
+        </div>
+        <div class="actions">
+            <button class="btn btn--primary" style="background:#7B1FA2" onclick="openAsanaModal({{ pet.id }}, '{{ pet.name }}')">Записать в Asana</button>
+            <button class="btn btn--primary" style="background:#0052CC" onclick="openJiraModal({{ pet.id }}, '{{ pet.name }}')">Записать в Jira</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <button class="modal__close" id="modalClose">&times;</button>
+            <div class="modal__title">Написать нам</div>
+            <div class="modal__subtitle">Питомец: <strong id="modalPetName">{{ pet.name }}</strong></div>
+            <input type="hidden" id="modalPetId" value="{{ pet.id }}">
+            <input class="modal__field" id="modalUserName" placeholder="Ваше имя *" style="width:100%;padding:10px;margin-bottom:8px;border:1px solid #ddd;border-radius:8px;font-size:0.95rem">
+            <input class="modal__field" id="modalUserEmail" placeholder="Email" style="width:100%;padding:10px;margin-bottom:8px;border:1px solid #ddd;border-radius:8px;font-size:0.95rem">
+            <input class="modal__field" id="modalUserPhone" placeholder="Телефон" style="width:100%;padding:10px;margin-bottom:8px;border:1px solid #ddd;border-radius:8px;font-size:0.95rem">
+            <textarea class="modal__field" id="modalMessage" placeholder="Ваше сообщение..."></textarea>
+            <button class="modal__submit" id="modalSubmit">Отправить</button>
+        </div>
+    </div>
+
+    <script src="/js/modal.js"></script>
+    <script src="/js/asana.js"></script>
+    <script src="/js/jira.js"></script>
+
+    <div class="modal-overlay" id="asanaOverlay">
+        <div class="modal">
+            <button class="modal__close" id="asanaClose">&times;</button>
+            <div class="modal__title">Записать в Asana</div>
+            <div class="modal__subtitle">Питомец: <strong id="asanaPetName">{{ pet.name }}</strong></div>
+            <input type="hidden" id="asanaPetId" value="{{ pet.id }}">
+            <input class="modal__field" id="asanaUserName" placeholder="Ваше имя *" style="width:100%;padding:10px;margin-bottom:8px;border:1px solid #ddd;border-radius:8px;font-size:0.95rem">
+            <input class="modal__field" id="asanaUserEmail" placeholder="Email" style="width:100%;padding:10px;margin-bottom:8px;border:1px solid #ddd;border-radius:8px;font-size:0.95rem">
+            <input class="modal__field" id="asanaUserPhone" placeholder="Телефон" style="width:100%;padding:10px;margin-bottom:8px;border:1px solid #ddd;border-radius:8px;font-size:0.95rem">
+            <textarea class="modal__field" id="asanaMessage" placeholder="Сообщение..."></textarea>
+            <button class="modal__submit" id="asanaSubmit" style="background:#7B1FA2">Отправить</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="jiraOverlay">
+        <div class="modal">
+            <button class="modal__close" id="jiraClose">&times;</button>
+            <div class="modal__title">Записать в Jira</div>
+            <div class="modal__subtitle">Питомец: <strong id="jiraPetName">{{ pet.name }}</strong></div>
+            <input type="hidden" id="jiraPetId" value="{{ pet.id }}">
+            <input class="modal__field" id="jiraUserName" placeholder="Ваше имя *" style="width:100%;padding:10px;margin-bottom:8px;border:1px solid #ddd;border-radius:8px;font-size:0.95rem">
+            <input class="modal__field" id="jiraUserEmail" placeholder="Email" style="width:100%;padding:10px;margin-bottom:8px;border:1px solid #ddd;border-radius:8px;font-size:0.95rem">
+            <input class="modal__field" id="jiraUserPhone" placeholder="Телефон" style="width:100%;padding:10px;margin-bottom:8px;border:1px solid #ddd;border-radius:8px;font-size:0.95rem">
+            <textarea class="modal__field" id="jiraMessage" placeholder="Сообщение..."></textarea>
+            <button class="modal__submit" id="jiraSubmit" style="background:#0052CC">Отправить</button>
+        </div>
+    </div>
+
+</body>
+</html>

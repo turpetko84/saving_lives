@@ -21,7 +21,8 @@
 .description p { color: #5D4037; font-size: 1.05rem; }
 
 /* === Actions === */
-.actions { display: flex; gap: 16px; flex-wrap: wrap; }
+.actions { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+.actions:last-child { margin-bottom: 0; }
 .btn { display: inline-block; padding: 14px 32px; border-radius: 8px; font-size: 1rem; font-weight: 600; text-decoration: none; cursor: pointer; border: none; transition: transform 0.2s, background 0.3s; }
 .btn--primary { background: #FF6F00; color: #fff; }
 .btn--primary:hover { background: #E65100; transform: scale(1.03); }

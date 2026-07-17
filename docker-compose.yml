@@ -3,3 +3,37 @@ services:
     build: .
     ports:
       - "8080:80"
+    depends_on:
+      - api
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - shared_images:/usr/share/nginx/html/images
+
+  api:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - backend/.env
+    depends_on:
+      - firebird
+    volumes:
+      - shared_images:/app/images
+    restart: unless-stopped
+
+  firebird:
+    image: firebirdsql/firebird:latest
+    ports:
+      - "3050:3050"
+    environment:
+      - ISC_PASSWORD=masterkey
+      - FIREBIRD_PASSWORD=masterkey
+      - FIREBIRD_DATABASE=shelter.fdb
+      - FIREBIRD_USER=SYSDBA
+    volumes:
+      - firebird_data:/var/lib/firebird/data
+    restart: unless-stopped
+
+volumes:
+  firebird_data:
+  shared_images:

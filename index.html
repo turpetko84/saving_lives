@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сохраняя жизнь — Приют для собак</title>
+    <title>Сохраняя жизни — Приют для собак</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="css/common.css">
     <style>
         /* ===== HERO / CAROUSEL ===== */
@@ -76,16 +77,11 @@
                 <div class="carousel__slide"><img src="images/carousel_3.jpg" alt="Собака 3"></div>
                 <div class="carousel__slide"><img src="images/carousel_4.jpg" alt="Собака 4"></div>
                 <div class="carousel__slide"><img src="images/carousel_5.jpg" alt="Собака 5"></div>
-                <div class="carousel__slide"><img src="images/carousel_6.jpg" alt="Собака 6"></div>
-                <div class="carousel__slide"><img src="images/carousel_7.jpg" alt="Собака 7"></div>
-                <div class="carousel__slide"><img src="images/carousel_8.jpg" alt="Собака 8"></div>
-                <div class="carousel__slide"><img src="images/carousel_9.jpg" alt="Собака 9"></div>
-                <div class="carousel__slide"><img src="images/carousel_10.jpg" alt="Собака 10"></div>
             </div>
         </div>
         <div class="hero__overlay"></div>
         <div class="hero__content">
-            <h1 class="hero__title">Сохраняя жизнь</h1>
+            <h1 class="hero__title">Сохраняя жизни</h1>
             <p class="hero__subtitle">Каждый пёс заслуживает любящего дома</p>
         </div>
         <button class="carousel__btn carousel__btn--prev" id="prevBtn" aria-label="Предыдущий">&#10094;</button>
@@ -120,61 +116,14 @@
     <section class="pets">
         <h2 class="pets__title">Наши питомцы</h2>
         <p class="pets__subtitle">Эти ребята ждут свой новый дом</p>
-        <div class="pets__grid">
-            <div class="pet-card">
-                <img class="pet-card__img" src="images/pet_11.jpg" alt="Бобик">
-                <div class="pet-card__body">
-                    <div class="pet-card__name">Бобик</div>
-                    <div class="pet-card__desc">Ласковый и игривый. Обожает детей и прогулки в парке.</div>
-                    <a href="bobik.html" class="pet-card__btn">Узнать больше</a>
-                </div>
-            </div>
-            <div class="pet-card">
-                <img class="pet-card__img" src="images/pet_12.jpg" alt="Рекс">
-                <div class="pet-card__body">
-                    <div class="pet-card__name">Рекс</div>
-                    <div class="pet-card__desc">Верный друг и охранник. Знает базовые команды.</div>
-                    <a href="reks.html" class="pet-card__btn">Узнать больше</a>
-                </div>
-            </div>
-            <div class="pet-card">
-                <img class="pet-card__img" src="images/pet_13.jpg" alt="Мушка">
-                <div class="pet-card__body">
-                    <div class="pet-card__name">Мушка</div>
-                    <div class="pet-card__desc">Тихая и спокойная. Идеальна для пожилых людей.</div>
-                    <a href="mushka.html" class="pet-card__btn">Узнать больше</a>
-                </div>
-            </div>
-            <div class="pet-card">
-                <img class="pet-card__img" src="images/pet_14.jpg" alt="Тузик">
-                <div class="pet-card__body">
-                    <div class="pet-card__name">Тузик</div>
-                    <div class="pet-card__desc">Энергичный и любопытный. Обожает бегать и играть с мячом.</div>
-                    <a href="tuzik.html" class="pet-card__btn">Узнать больше</a>
-                </div>
-            </div>
-            <div class="pet-card">
-                <img class="pet-card__img" src="images/pet_15.jpg" alt="Шарик">
-                <div class="pet-card__body">
-                    <div class="pet-card__name">Шарик</div>
-                    <div class="pet-card__desc">Весёлый и добрый. Любит возиться на диване.</div>
-                    <a href="sharik.html" class="pet-card__btn">Узнать больше</a>
-                </div>
-            </div>
-            <div class="pet-card">
-                <img class="pet-card__img" src="images/pet_16.jpg" alt="Дружок">
-                <div class="pet-card__body">
-                    <div class="pet-card__name">Дружок</div>
-                    <div class="pet-card__desc">Умный и послушный. Быстро учится новому.</div>
-                    <a href="druzhok.html" class="pet-card__btn">Узнать больше</a>
-                </div>
-            </div>
+        <div class="pets__grid" id="petsGrid">
+            <p style="color:#888;grid-column:1/-1">Загрузка...</p>
         </div>
     </section>
 
     <!-- FOOTER -->
     <footer class="footer">
-        <div class="footer__name">Сохраняя жизнь</div>
+        <div class="footer__name">Сохраняя жизни</div>
         <div class="footer__copy">&copy; 2025 Приют для собак. Все права защищены.</div>
     </footer>
 
@@ -228,6 +177,28 @@
             const diff = touchStartX - e.changedTouches[0].screenX;
             if (Math.abs(diff) > 50) diff > 0 ? next() : prev();
         }, { passive: true });
+
+        // ===== LOAD PETS FROM API =====
+        async function loadPets() {
+            const grid = document.getElementById('petsGrid');
+            try {
+                const resp = await fetch('/api/pets/random?count=3');
+                const pets = await resp.json();
+                grid.innerHTML = pets.map(pet => `
+                    <div class="pet-card">
+                        <img class="pet-card__img" src="/${pet.image_path}" alt="${pet.name}">
+                        <div class="pet-card__body">
+                            <div class="pet-card__name">${pet.name}</div>
+                            <div class="pet-card__desc">${pet.description.substring(0, 100)}${pet.description.length > 100 ? '...' : ''}</div>
+                            <a href="/pet/${pet.id}" class="pet-card__btn">Узнать больше</a>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (e) {
+                grid.innerHTML = '<p style="color:#888;grid-column:1/-1">Не удалось загрузить питомцев</p>';
+            }
+        }
+        loadPets();
     </script>
 </body>
 </html>
